@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parcours Avenir — Stage Éducateur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --p50:  #EEEDFE;
+      --p100: #CECBF6;
+      --p200: #AFA9EC;
+      --p400: #7F77DD;
+      --p600: #534AB7;
+      --p800: #3C3489;
+      --p900: #26215C;
+      --g50:  #EAF3DE;
+      --g100: #C0DD97;
+      --g700: #3B6D11;
+      --c50:  #FAECE7;
+      --c100: #F5C4B3;
+      --c700: #993C1D;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #F5F4FB;
+      color: #1a1730;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 4px;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(127,119,221,0.2);
+      border-radius: 100px;
+      padding: 5px 8px;
+      box-shadow: 0 4px 32px rgba(60,52,137,0.12);
+    }
+    nav a {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px; font-weight: 600;
+      color: #534AB7; text-decoration: none;
+      padding: 6px 16px; border-radius: 100px;
+      transition: background .2s, color .2s; white-space: nowrap;
+    }
+    nav a:hover, nav a.active { background: var(--p600); color: white; }
+
+    /* ── SECTIONS ── */
+    section {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 7rem 2rem 4rem;
+      position: relative; overflow: hidden;
+    }
+    .inner { max-width: 860px; margin: 0 auto; width: 100%; position: relative; z-index: 2; }
+
+    /* ── DÉCO ── */
+    .deco-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(127,119,221,0.12); pointer-events: none;
+    }
+    .deco-dot {
+      position: absolute; border-radius: 50%;
+      background: var(--p400); opacity: 0.18; pointer-events: none;
+    }
+    .deco-line { position: absolute; background: rgba(127,119,221,0.07); pointer-events: none; }
+    .deco-cross { position: absolute; pointer-events: none; opacity: 0.08; }
+    .deco-cross::before, .deco-cross::after { content: ''; position: absolute; background: var(--p600); }
+    .deco-cross::before { width: 1px; height: 24px; left: 50%; top: 0; }
+    .deco-cross::after  { width: 24px; height: 1px; top: 50%; left: 0; }
+
+    /* ── HERO ── */
+    #hero { background: var(--p900); }
+    #hero .r1 { width:500px; height:500px; top:-160px; right:-160px; border-color:rgba(206,203,246,0.07); }
+    #hero .r2 { width:300px; height:300px; top:-60px;  right:-60px;  border-color:rgba(206,203,246,0.06); }
+    #hero .r3 { width:180px; height:180px; bottom:60px; left:-80px;  border-color:rgba(206,203,246,0.06); }
+    #hero .r4 { width:80px;  height:80px;  bottom:110px; left:-30px; border-color:rgba(206,203,246,0.09); }
+    #hero .d1 { width:8px; height:8px; top:22%; left:15%; }
+    #hero .d2 { width:5px; height:5px; top:55%; left:8%; opacity:.12; }
+    #hero .d3 { width:6px; height:6px; top:30%; right:28%; }
+    #hero .d4 { width:4px; height:4px; bottom:20%; right:18%; }
+    #hero .lh { height:1px; width:120px; top:38%; left:0; }
+    #hero .lv { width:1px; height:90px; bottom:30%; right:22%; }
+    .dot-grid {
+      position:absolute; top:0; right:0;
+      width:260px; height:260px; pointer-events:none; opacity:.06;
+    }
+
+    .hero-tag {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(206,203,246,0.1); border:1px solid rgba(206,203,246,0.18);
+      border-radius:100px; padding:6px 18px;
+      font-size:11.5px; font-weight:600; color:var(--p100);
+      letter-spacing:.06em; margin-bottom:2rem;
+      animation:fadeUp .6s ease both;
+    }
+    .hero-tag-dot { width:6px; height:6px; border-radius:50%; background:var(--p400); display:inline-block; }
+
+    #hero h1 {
+      font-family:'Syne',sans-serif;
+      font-size:clamp(44px,7vw,80px); font-weight:800;
+      color:white; line-height:1.02; letter-spacing:-2px;
+      margin-bottom:1.5rem; animation:fadeUp .6s .1s ease both;
+    }
+    #hero h1 em { font-style:normal; color:var(--p400); }
+
+    #hero > .inner > p {
+      font-size:17px; color:rgba(206,203,246,.65);
+      max-width:480px; line-height:1.7;
+      animation:fadeUp .6s .2s ease both;
+    }
+
+    .hero-school {
+      margin-top:2.5rem;
+      display:inline-flex; align-items:center; gap:14px;
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+      border-radius:14px; padding:12px 18px;
+      animation:fadeUp .6s .3s ease both;
+    }
+    .hero-school-icon {
+      width:44px; height:44px; border-radius:10px;
+      background:rgba(127,119,221,.2); border:1px solid rgba(127,119,221,.25);
+      display:flex; align-items:center; justify-content:center; font-size:20px;
+    }
+    .hero-school-text strong { display:block; font-weight:600; color:white; font-size:15px; }
+    .hero-school-text span   { font-size:13px; color:rgba(206,203,246,.5); }
+
+    .hero-stats {
+      display:flex; gap:2rem; margin-top:3rem;
+      animation:fadeUp .6s .4s ease both;
+    }
+    .hero-stat { display:flex; flex-direction:column; gap:4px; }
+    .hero-stat-val {
+      font-family:'Syne',sans-serif;
+      font-size:32px; font-weight:800; color:white; line-height:1;
+    }
+    .hero-stat-val span { color:var(--p400); }
+    .hero-stat-lbl { font-size:12px; color:rgba(206,203,246,.45); letter-spacing:.04em; }
+    .hero-divider  { width:1px; background:rgba(255,255,255,.07); align-self:stretch; }
+
+    /* ── TITRES COMMUNS ── */
+    .sec-eyebrow {
+      font-family:'Syne',sans-serif; font-size:11px; font-weight:700;
+      letter-spacing:.16em; text-transform:uppercase;
+      color:var(--p600); margin-bottom:.5rem; display:block;
+    }
+    .sec-title {
+      font-family:'Syne',sans-serif;
+      font-size:clamp(30px,4.5vw,48px); font-weight:800;
+      color:var(--p900); line-height:1.08; letter-spacing:-1px; margin-bottom:1rem;
+    }
+    .sec-lead {
+      font-size:16px; color:#5a5275;
+      max-width:500px; line-height:1.7; margin-bottom:2.5rem;
+    }
+
+    /* ── SECTION 1 : ÉVOLUTION ── */
+    #evolution { background:white; }
+    #evolution .r1 { width:340px; height:340px; bottom:-120px; right:-100px; border-color:rgba(127,119,221,.07); }
+    #evolution .r2 { width:160px; height:160px; bottom:-50px;  right:-30px;  border-color:rgba(127,119,221,.09); }
+    #evolution .d1 { width:7px; height:7px; top:20%; right:10%; }
+    #evolution .d2 { width:4px; height:4px; top:60%; left:5%; opacity:.1; }
+    #evolution .lh { height:1px; width:80px; top:50%; right:5%; }
+
+    .steps-layout {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:2.5rem; align-items:center;
+    }
+    .steps-col { display:flex; flex-direction:column; gap:12px; }
+
+    .step-card {
+      display:flex; align-items:center; gap:16px;
+      padding:16px 20px;
+      background:var(--p50); border:1px solid var(--p100); border-radius:16px;
+      transition:border-color .2s;
+    }
+    .step-card:hover { border-color:var(--p400); }
+    .step-circle {
+      width:52px; height:52px; border-radius:14px;
+      background:white; border:1.5px solid var(--p100);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Syne',sans-serif; font-weight:800; font-size:18px;
+      color:var(--p600); flex-shrink:0; transition:background .2s, color .2s, border-color .2s;
+    }
+    .step-card:hover .step-circle { background:var(--p600); color:white; border-color:var(--p600); }
+    .step-body { flex:1; }
+    .step-name { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--p900); margin-bottom:3px; }
+    .step-desc { font-size:13px; color:#7a7095; line-height:1.45; }
+    .step-arr  { font-size:18px; color:var(--p200); }
+
+    .evo-panel {
+      background:var(--p900); border-radius:24px; padding:2rem;
+      display:flex; flex-direction:column; gap:1.5rem;
+      position:relative; overflow:hidden;
+    }
+    .evo-panel::before {
+      content:''; position:absolute;
+      width:200px; height:200px; border-radius:50%;
+      border:1px solid rgba(206,203,246,.08); top:-60px; right:-60px;
+    }
+    .evo-panel::after {
+      content:''; position:absolute;
+      width:100px; height:100px; border-radius:50%;
+      border:1px solid rgba(206,203,246,.06); top:-20px; right:-20px;
+    }
+    .evo-panel-title {
+      font-family:'Syne',sans-serif; font-size:13px; font-weight:700;
+      color:rgba(206,203,246,.5); letter-spacing:.08em; text-transform:uppercase;
+    }
+    .evo-kpi { display:flex; flex-direction:column; gap:4px; }
+    .evo-kpi-val {
+      font-family:'Syne',sans-serif; font-size:48px; font-weight:800;
+      color:white; line-height:1; letter-spacing:-2px;
+    }
+    .evo-kpi-val span { color:var(--p400); font-size:32px; }
+    .evo-kpi-lbl { font-size:14px; color:rgba(206,203,246,.55); line-height:1.4; }
+    .evo-sep { height:1px; background:rgba(255,255,255,.06); }
+    .evo-tags { display:flex; gap:8px; flex-wrap:wrap; }
+    .evo-tag {
+      display:inline-block; background:rgba(127,119,221,.18);
+      color:var(--p100); font-size:12px; font-weight:600;
+      padding:5px 12px; border-radius:8px;
+    }
+    .evo-quote {
+      font-size:14px; font-style:italic;
+      color:rgba(206,203,246,.45); line-height:1.6;
+      border-left:2px solid rgba(127,119,221,.3); padding-left:12px;
+    }
+
+    /* ── SECTION 2 : FORMATION ── */
+    #formation { background:var(--p50); }
+    #formation .r1 { width:420px; height:420px; top:-150px; left:-150px; border-color:rgba(127,119,221,.06); }
+    #formation .r2 { width:200px; height:200px; top:-60px;  left:-60px;  border-color:rgba(127,119,221,.08); }
+    #formation .d1 { width:6px; height:6px; bottom:25%; right:8%; }
+    #formation .d2 { width:4px; height:4px; top:25%; right:15%; opacity:.12; }
+    #formation .lv { width:1px; height:100px; bottom:15%; left:5%; }
+
+    .formation-grid {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:1.5rem; align-items:start;
+    }
+    .bac-flow { display:flex; flex-direction:column; gap:0; }
+    .bac-node {
+      display:flex; align-items:center; gap:14px; padding:18px 20px;
+      background:white; border:1px solid rgba(127,119,221,.15); border-radius:16px;
+    }
+    .bac-icon {
+      width:48px; height:48px; border-radius:12px; background:var(--p900);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Syne',sans-serif; font-weight:800; font-size:14px;
+      color:white; flex-shrink:0; letter-spacing:.04em;
+    }
+    .bac-node-title { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--p900); margin-bottom:3px; }
+    .bac-node-sub   { font-size:13px; color:#7a7095; }
+    .bac-connector  { display:flex; align-items:center; gap:10px; padding:0 24px; margin:6px 0; }
+    .bac-connector-line { flex:1; height:1px; border-top:1.5px dashed rgba(127,119,221,.25); }
+    .bac-connector-arrow { color:var(--p400); font-size:16px; }
+
+    .dees-big-card { background:var(--p900); border-radius:20px; overflow:hidden; position:relative; }
+    .dees-big-card::before {
+      content:''; position:absolute;
+      width:240px; height:240px; border-radius:50%;
+      border:1px solid rgba(206,203,246,.06); top:-80px; right:-80px;
+    }
+    .dees-big-card::after {
+      content:''; position:absolute;
+      width:120px; height:120px; border-radius:50%;
+      border:1px solid rgba(206,203,246,.07); top:-30px; right:-30px;
+    }
+    .dees-top {
+      padding:1.75rem 2rem 1.25rem;
+      border-bottom:1px solid rgba(255,255,255,.06); position:relative; z-index:1;
+    }
+    .dees-label {
+      font-family:'Syne',sans-serif; font-size:10px; font-weight:700;
+      letter-spacing:.14em; text-transform:uppercase;
+      color:var(--p400); margin-bottom:10px; display:block;
+    }
+    .dees-acronym {
+      font-family:'Syne',sans-serif; font-size:44px; font-weight:800;
+      color:white; line-height:1; letter-spacing:-1px;
+    }
+    .dees-acronym span { color:var(--p400); }
+    .dees-fullname { font-size:14px; color:rgba(206,203,246,.55); margin-top:8px; line-height:1.5; }
+    .dees-bottom {
+      padding:1.25rem 2rem; display:flex; flex-direction:column; gap:12px;
+      position:relative; z-index:1;
+    }
+    .dees-info-row { display:flex; align-items:center; gap:12px; }
+    .dees-info-icon {
+      width:36px; height:36px; border-radius:9px;
+      background:rgba(127,119,221,.15);
+      display:flex; align-items:center; justify-content:center;
+      font-size:16px; flex-shrink:0;
+    }
+    .dees-info-text strong { display:block; font-size:14px; font-weight:600; color:white; margin-bottom:1px; }
+    .dees-info-text span   { font-size:12px; color:rgba(206,203,246,.4); }
+
+    /* ── SECTION 3 : BILAN ── */
+    #bilan { background:white; }
+    #bilan .r1 { width:300px; height:300px; top:-100px; right:-100px; border-color:rgba(127,119,221,.07); }
+    #bilan .d1 { width:8px; height:8px; bottom:20%; left:6%; }
+    #bilan .d2 { width:5px; height:5px; top:20%; left:3%; opacity:.1; }
+    #bilan .lv { width:1px; height:120px; top:20%; right:6%; }
+    #bilan .cr1 { top:25%; right:8%; }
+    #bilan .cr2 { bottom:25%; left:3%; }
+
+    .bilan-layout { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+    .bilan-col { display:flex; flex-direction:column; gap:10px; }
+
+    .bilan-header {
+      display:flex; align-items:center; gap:10px;
+      padding:14px 18px; border-radius:14px; margin-bottom:2px;
+    }
+    .bilan-header.plus  { background:var(--g50);  border:1px solid var(--g100); }
+    .bilan-header.minus { background:var(--c50);  border:1px solid var(--c100); }
+    .bilan-header-icon {
+      width:32px; height:32px; border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:16px; font-weight:700;
+    }
+    .plus  .bilan-header-icon { background:var(--g100); color:var(--g700); }
+    .minus .bilan-header-icon { background:var(--c100); color:var(--c700); }
+    .bilan-header-title { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; }
+    .plus  .bilan-header-title { color:var(--g700); }
+    .minus .bilan-header-title { color:var(--c700); }
+
+    .bilan-item {
+      padding:16px 18px; border-radius:14px; border:1px solid;
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .plus  .bilan-item { background:#f5fbee; border-color:#d3edb4; }
+    .minus .bilan-item { background:#fdf3ef; border-color:#f5c4b3; }
+    .bilan-item-bullet {
+      width:20px; height:20px; border-radius:6px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px; font-weight:700; flex-shrink:0; margin-top:1px;
+    }
+    .plus  .bilan-item-bullet { background:var(--g100); color:var(--g700); }
+    .minus .bilan-item-bullet { background:var(--c100); color:var(--c700); }
+    .bilan-item-text { font-size:14px; line-height:1.6; }
+    .plus  .bilan-item-text { color:#2d4d10; }
+    .minus .bilan-item-text { color:#6b2912; }
+
+    .bilan-banner {
+      margin-top:2rem; background:var(--p50);
+      border:1px solid var(--p100); border-radius:16px;
+      padding:1.25rem 1.75rem; display:flex; align-items:center; gap:1.5rem;
+    }
+    .bilan-banner-icon {
+      width:48px; height:48px; border-radius:14px; background:var(--p800);
+      display:flex; align-items:center; justify-content:center;
+      font-size:22px; flex-shrink:0;
+    }
+    .bilan-banner-text strong { display:block; font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--p900); margin-bottom:3px; }
+    .bilan-banner-text span   { font-size:13px; color:#7a7095; }
+
+    /* ── SECTION 4 : CONCLUSION ── */
+    #conclusion { background:var(--p900); }
+    #conclusion .r1 { width:500px; height:500px; bottom:-200px; left:-200px; border-color:rgba(206,203,246,.05); }
+    #conclusion .r2 { width:240px; height:240px; bottom:-80px;  left:-80px;  border-color:rgba(206,203,246,.06); }
+    #conclusion .r3 { width:120px; height:120px; top:20%; right:5%;          border-color:rgba(206,203,246,.06); }
+    #conclusion .d1 { width:7px; height:7px; top:15%; right:12%; background:var(--p400); }
+    #conclusion .d2 { width:5px; height:5px; top:35%; right:7%;  background:var(--p400); opacity:.12; }
+    #conclusion .d3 { width:4px; height:4px; bottom:20%; right:20%; background:var(--p400); opacity:.1; }
+    #conclusion .sec-eyebrow { color:var(--p400); }
+    #conclusion .sec-title   { color:white; }
+
+    .conc-layout { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; }
+    .conc-left   { display:flex; flex-direction:column; gap:1.25rem; }
+
+    .quote-big {
+      border-left:3px solid var(--p400);
+      background:rgba(127,119,221,.08);
+      border-radius:0 16px 16px 0; padding:1.5rem 1.75rem;
+    }
+    .quote-big p    { font-size:17px; font-style:italic; color:rgba(206,203,246,.85); line-height:1.65; }
+    .quote-big cite { display:block; margin-top:10px; font-size:12px; font-style:normal; color:rgba(206,203,246,.35); letter-spacing:.04em; }
+
+    .chips-row { display:flex; flex-wrap:wrap; gap:8px; }
+    .chip {
+      display:flex; align-items:center; gap:7px;
+      background:rgba(255,255,255,.06); border:1px solid rgba(206,203,246,.15);
+      color:var(--p100); font-size:13px; font-weight:500;
+      padding:8px 16px; border-radius:100px; transition:background .2s;
+    }
+    .chip:hover { background:rgba(255,255,255,.1); }
+    .chip-dot { width:6px; height:6px; border-radius:50%; background:var(--p400); }
+
+    .conc-panel { display:flex; flex-direction:column; gap:12px; }
+    .conc-card {
+      background:rgba(255,255,255,.05); border:1px solid rgba(206,203,246,.1);
+      border-radius:16px; padding:1.25rem 1.5rem;
+    }
+    .conc-card-label {
+      font-size:11px; font-weight:600; color:var(--p400);
+      letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px;
+    }
+    .conc-card-val {
+      font-family:'Syne',sans-serif; font-size:36px; font-weight:800;
+      color:white; line-height:1; letter-spacing:-1px;
+    }
+    .conc-card-val span { color:var(--p400); }
+    .conc-card-desc { font-size:13px; color:rgba(206,203,246,.4); margin-top:6px; line-height:1.5; }
+
+    .conc-takeaway {
+      background:rgba(127,119,221,.15); border:1px solid rgba(127,119,221,.25);
+      border-radius:16px; padding:1.25rem 1.5rem;
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .conc-takeaway-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
+    .conc-takeaway-text { font-size:14px; color:var(--p100); line-height:1.6; }
+    .conc-takeaway-text strong { color:white; font-weight:600; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-d1 { transition-delay:.1s; }
+    .reveal-d2 { transition-delay:.2s; }
+    .reveal-d3 { transition-delay:.3s; }
+    .reveal-d4 { transition-delay:.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:680px) {
+      nav a { font-size:11px; padding:5px 10px; }
+      .steps-layout, .formation-grid, .conc-layout, .bilan-layout { grid-template-columns:1fr; }
+      .hero-stats { gap:1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#hero" class="active">Intro</a>
+    <a href="#evolution">Évolution</a>
+    <a href="#formation">Formation</a>
+    <a href="#bilan">Bilan</a>
+    <a href="#conclusion">Conclusion</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="deco-ring r1"></div>
+    <div class="deco-ring r2"></div>
+    <div class="deco-ring r3"></div>
+    <div class="deco-ring r4"></div>
+    <div class="deco-dot d1"></div>
+    <div class="deco-dot d2"></div>
+    <div class="deco-dot d3"></div>
+    <div class="deco-dot d4"></div>
+    <div class="deco-line lh" style="height:1px;width:120px;top:38%;left:0;"></div>
+    <div class="deco-line lv" style="width:1px;height:90px;bottom:30%;right:22%;"></div>
+    <svg class="dot-grid" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots" x="0" y="0" width="26" height="26" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#AFA9EC"/></pattern></defs>
+      <rect width="260" height="260" fill="url(#dots)"/>
+    </svg>
+    <div class="inner">
+      <div class="hero-tag"><span class="hero-tag-dot"></span>Parcours Avenir · Rapport de stage 2025</div>
+      <h1>Découverte<br/>du métier<br/>d'<em>éducateur</em></h1>
+      <p>Retour sur mon stage à l'école primaire des Canonges, Pamiers — une semaine pour tout comprendre d'une vocation humaine.</p>
+      <div class="hero-school">
+        <div class="hero-school-icon">🏫</div>
+        <div class="hero-school-text">
+          <strong>École primaire des Canonges</strong>
+          <span>Pamiers, Ariège · France</span>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-val">4<span>+</span></div><div class="hero-stat-lbl">Niveaux de carrière</div></div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat"><div class="hero-stat-val">3<span>ans</span></div><div class="hero-stat-lbl">Formation DEES</div></div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat"><div class="hero-stat-val">1<span>sem.</span></div><div class="hero-stat-lbl">Durée du stage</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÉVOLUTION -->
+  <section id="evolution">
+    <div class="deco-ring r1"></div>
+    <div class="deco-ring r2"></div>
+    <div class="deco-dot d1"></div>
+    <div class="deco-dot d2"></div>
+    <div class="deco-line lh" style="height:1px;width:80px;top:50%;right:5%;"></div>
+    <div class="inner">
+      <span class="sec-eyebrow reveal">01 — Évolution de carrière</span>
+      <h2 class="sec-title reveal reveal-d1">Progresser dans<br/>le métier</h2>
+      <p class="sec-lead reveal reveal-d2">L'éducateur accompagne des enfants ou des personnes en difficulté au quotidien. Avec l'expérience, plusieurs voies s'ouvrent progressivement.</p>
+      <div class="steps-layout reveal reveal-d3">
+        <div class="steps-col">
+          <div class="step-card">
+            <div class="step-circle">1</div>
+            <div class="step-body"><div class="step-name">Éducateur</div><div class="step-desc">Terrain, accompagnement quotidien</div></div>
+            <div class="step-arr">›</div>
+          </div>
+          <div class="step-card">
+            <div class="step-circle">2</div>
+            <div class="step-body"><div class="step-name">Coordinateur</div><div class="step-desc">Pilotage de projets éducatifs</div></div>
+            <div class="step-arr">›</div>
+          </div>
+          <div class="step-card">
+            <div class="step-circle">3</div>
+            <div class="step-body"><div class="step-name">Responsable d'équipe</div><div class="step-desc">Animation et gestion d'une équipe</div></div>
+            <div class="step-arr">›</div>
+          </div>
+          <div class="step-card">
+            <div class="step-circle">4</div>
+            <div class="step-body"><div class="step-name">Directeur de structure</div><div class="step-desc">Direction complète d'un établissement</div></div>
+          </div>
+        </div>
+        <div class="evo-panel">
+          <div class="evo-panel-title">Pourquoi ce métier ?</div>
+          <div class="evo-kpi">
+            <div class="evo-kpi-val">100<span>%</span></div>
+            <div class="evo-kpi-lbl">Métier en contact direct avec l'humain, chaque journée est unique</div>
+          </div>
+          <div class="evo-sep"></div>
+          <div class="evo-kpi">
+            <div class="evo-kpi-val">4<span>voies</span></div>
+            <div class="evo-kpi-lbl">D'évolution possibles après les premières années d'expérience</div>
+          </div>
+          <div class="evo-sep"></div>
+          <div class="evo-tags">
+            <span class="evo-tag">Social</span>
+            <span class="evo-tag">Éducatif</span>
+            <span class="evo-tag">Humain</span>
+          </div>
+          <div class="evo-quote">« Travailler avec les enfants, c'est voir le monde avec d'autres yeux. »</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMATION -->
+  <section id="formation">
+    <div class="deco-ring r1"></div>
+    <div class="deco-ring r2"></div>
+    <div class="deco-dot d1"></div>
+    <div class="deco-dot d2"></div>
+    <div class="deco-line lv" style="width:1px;height:100px;bottom:15%;left:5%;"></div>
+    <div class="inner">
+      <span class="sec-eyebrow reveal">02 — Parcours scolaire</span>
+      <h2 class="sec-title reveal reveal-d1">La formation<br/>pour y accéder</h2>
+      <p class="sec-lead reveal reveal-d2">Devenir éducateur spécialisé passe par un diplôme d'État reconnu. Voici les étapes à suivre après le bac.</p>
+      <div class="formation-grid reveal reveal-d3">
+        <div class="bac-flow">
+          <div class="bac-node">
+            <div class="bac-icon">BAC</div>
+            <div><div class="bac-node-title">Baccalauréat</div><div class="bac-node-sub">Toutes filières acceptées</div></div>
+          </div>
+          <div class="bac-connector">
+            <div class="bac-connector-line"></div>
+            <div class="bac-connector-arrow">↓</div>
+            <div class="bac-connector-line"></div>
+          </div>
+          <div class="bac-node">
+            <div class="bac-icon" style="font-size:11px;letter-spacing:0;">ÉCOLE</div>
+            <div><div class="bac-node-title">École spécialisée</div><div class="bac-node-sub">Formation théorique + stages pratiques</div></div>
+          </div>
+          <div class="bac-connector">
+            <div class="bac-connector-line"></div>
+            <div class="bac-connector-arrow">↓</div>
+            <div class="bac-connector-line"></div>
+          </div>
+          <div class="bac-node" style="border-color:var(--p200);background:var(--p50);">
+            <div class="bac-icon" style="background:var(--p600);font-size:12px;">DEES</div>
+            <div><div class="bac-node-title" style="color:var(--p800);">Diplôme obtenu</div><div class="bac-node-sub">Reconnu par l'État · Prêt à exercer</div></div>
+          </div>
+        </div>
+        <div class="dees-big-card">
+          <div class="dees-top">
+            <span class="dees-label">Diplôme principal</span>
+            <div class="dees-acronym"><span>D</span>EES</div>
+            <div class="dees-fullname">Diplôme d'État<br/>d'Éducateur Spécialisé</div>
+          </div>
+          <div class="dees-bottom">
+            <div class="dees-info-row">
+              <div class="dees-info-icon">⏱️</div>
+              <div class="dees-info-text"><strong>Durée</strong><span>Environ 3 ans après le bac</span></div>
+            </div>
+            <div class="dees-info-row">
+              <div class="dees-info-icon">🏛️</div>
+              <div class="dees-info-text"><strong>Reconnaissance</strong><span>Diplôme d'État — niveau bac +3</span></div>
+            </div>
+            <div class="dees-info-row">
+              <div class="dees-info-icon">📋</div>
+              <div class="dees-info-text"><strong>Contenu</strong><span>Théorie + stages en structures sociales</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BILAN -->
+  <section id="bilan">
+    <div class="deco-ring r1"></div>
+    <div class="deco-dot d1"></div>
+    <div class="deco-dot d2"></div>
+    <div class="deco-line lv" style="width:1px;height:120px;top:20%;right:6%;"></div>
+    <div class="deco-cross cr1"></div>
+    <div class="deco-cross cr2"></div>
+    <div class="inner">
+      <span class="sec-eyebrow reveal">03 — Analyse du métier</span>
+      <h2 class="sec-title reveal reveal-d1">Avantages &amp;<br/>inconvénients</h2>
+      <p class="sec-lead reveal reveal-d2">Comme tout métier, celui d'éducateur a ses forces et ses contraintes. Voici ce que le stage m'a appris.</p>
+      <div class="bilan-layout reveal reveal-d3">
+        <div class="bilan-col plus">
+          <div class="bilan-header plus">
+            <div class="bilan-header-icon">+</div>
+            <div class="bilan-header-title">Points positifs</div>
+          </div>
+          <div class="bilan-item">
+            <div class="bilan-item-bullet">✓</div>
+            <div class="bilan-item-text">Métier profondément humain — on aide les personnes à progresser et à prendre confiance en elles.</div>
+          </div>
+          <div class="bilan-item">
+            <div class="bilan-item-bullet">✓</div>
+            <div class="bilan-item-text">Chaque journée est différente : on organise des activités, on accompagne des jeunes et on travaille en équipe.</div>
+          </div>
+        </div>
+        <div class="bilan-col minus">
+          <div class="bilan-header minus">
+            <div class="bilan-header-icon">−</div>
+            <div class="bilan-header-title">Points de vigilance</div>
+          </div>
+          <div class="bilan-item">
+            <div class="bilan-item-bullet">!</div>
+            <div class="bilan-item-text">Le métier peut être fatigant physiquement et mentalement selon les situations rencontrées.</div>
+          </div>
+          <div class="bilan-item">
+            <div class="bilan-item-bullet">!</div>
+            <div class="bilan-item-text">Les horaires peuvent être décalés : travail le soir, le week-end ou pendant les vacances selon la structure.</div>
+          </div>
+        </div>
+      </div>
+      <div class="bilan-banner reveal reveal-d4">
+        <div class="bilan-banner-icon">💡</div>
+        <div class="bilan-banner-text">
+          <strong>Un métier exigeant mais enrichissant</strong>
+          <span>Malgré ses contraintes, ce métier offre une vraie satisfaction humaine au quotidien et des perspectives d'évolution réelles.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCLUSION -->
+  <section id="conclusion">
+    <div class="deco-ring r1"></div>
+    <div class="deco-ring r2"></div>
+    <div class="deco-ring r3"></div>
+    <div class="deco-dot d1"></div>
+    <div class="deco-dot d2"></div>
+    <div class="deco-dot d3"></div>
+    <div class="inner">
+      <span class="sec-eyebrow reveal">04 — Conclusion</span>
+      <h2 class="sec-title reveal reveal-d1">Ce que ce stage<br/>m'a appris</h2>
+      <div class="conc-layout reveal reveal-d2">
+        <div class="conc-left">
+          <div class="quote-big">
+            <p>« Ce stage m'a permis de voir l'autre face du métier d'éducateur et de mieux comprendre le point de vue des enfants, leur manière de réagir ainsi que leur façon de penser. »</p>
+            <cite>— Mon retour d'expérience</cite>
+          </div>
+          <div class="chips-row">
+            <span class="chip"><span class="chip-dot"></span>Être à l'écoute</span>
+            <span class="chip"><span class="chip-dot"></span>Patience</span>
+            <span class="chip"><span class="chip-dot"></span>Empathie</span>
+            <span class="chip"><span class="chip-dot"></span>Observation</span>
+            <span class="chip"><span class="chip-dot"></span>Travail d'équipe</span>
+          </div>
+        </div>
+        <div class="conc-panel">
+          <div class="conc-card">
+            <div class="conc-card-label">Ce que j'ai découvert</div>
+            <div class="conc-card-val">+<span> de recul</span></div>
+            <div class="conc-card-desc">Comprendre le point de vue d'un enfant demande de changer complètement de perspective.</div>
+          </div>
+          <div class="conc-card">
+            <div class="conc-card-label">Compétence clé</div>
+            <div class="conc-card-val">L'<span>écoute</span></div>
+            <div class="conc-card-desc">La qualité la plus précieuse dans ce métier, au-delà de toutes les techniques.</div>
+          </div>
+          <div class="conc-takeaway">
+            <div class="conc-takeaway-icon">🎯</div>
+            <div class="conc-takeaway-text">Ce stage m'a aussi appris à être <strong>plus patient</strong> et à mieux <strong>observer avant d'agir</strong> — des qualités utiles bien au-delà de ce métier.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const links = document.querySelectorAll('nav a');
+    const sections = document.querySelectorAll('section');
+
+    const navObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+        }
+      });
+    }, { threshold: 0.35 });
+    sections.forEach(s => navObs.observe(s));
+
+    const revObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+  </script>
+</body>
+</html>
